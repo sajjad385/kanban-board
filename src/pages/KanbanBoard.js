@@ -98,7 +98,7 @@ const KanbanBoard = () => {
                 <div className="row">
                     <div className="col-4">
                         <div className="card">
-                            <span className="img-thumbnail task-header card-title text-center fw-bold">TO-DO</span>
+                            <span className="img-thumbnail task-header card-title text-center fw-bold bg-primary  text-white">TO-DO</span>
                             <div className="to_do card-body"
                                  onDragOver={(e) => onDragOver(e)}
                                  onDrop={(e) => {
@@ -110,7 +110,7 @@ const KanbanBoard = () => {
                     </div>
                     <div className="col-4">
                         <div className="card">
-                            <span className="img-thumbnail card-title text-center fw-bold">Progress</span>
+                            <span className="img-thumbnail card-title text-center fw-bold bg-danger  text-white">Progress</span>
                             <div className="droppable card-body"
                                  onDragOver={(e) => onDragOver(e)}
                                  onDrop={(e) => onDrop(e, "progress")}>
@@ -120,7 +120,7 @@ const KanbanBoard = () => {
                     </div>
                     <div className="col-4">
                         <div className="card">
-                            <span className="img-thumbnail task-header card-title text-center fw-bold">DONE</span>
+                            <span className="img-thumbnail task-header card-title text-center fw-bold bg-success text-white">DONE</span>
                             <div className="droppable card-body"
                                  onDragOver={(e) => onDragOver(e)}
                                  onDrop={(e) => onDrop(e, "done")}>
