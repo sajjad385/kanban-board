@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import {apiUrl} from "../config/apiConfig";
-import Board from "./Board";
-import AddTask from "./AddTask";
+import Board from "../components/Board";
+import AddTask from "../components/AddTask";
 
 const KanbanBoard = () => {
     const [state, setState] = useState({tasks: []});
