@@ -1,21 +1,25 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
+import {apiUrl} from "../config/apiConfig";
+import Board from "./Board";
+import AddTask from "./AddTask";
 
 const KanbanBoard = () => {
     const [state, setState] = useState({tasks: []});
     const [addTask, setAddTask] = useState('')
-    
+
     async function fetchData() {
         let response = await axios
-        .get('http://127.0.0.1:8000/api/tasks')
-        .then(res => {
-            return res;
-        });
+            .get(apiUrl + '/tasks')
+            .then(res => {
+                return res;
+            });
         let tasks = await response.data.data;
         setState({tasks});
     }
-    
+
     useEffect(() => {
+        console.log(apiUrl)
         fetchData()
     }, []);
 
@@ -34,7 +38,7 @@ const KanbanBoard = () => {
         let tasks = state.tasks.filter(async (task) => {
             if (task.id == id) {
                 task.status = category;
-                await axios.put('http://127.0.0.1:8000/api/tasks/'+task.id, {
+                await axios.put(apiUrl + '/tasks/' + task.id, {
                     status: task.status
                 })
             }
@@ -49,14 +53,14 @@ const KanbanBoard = () => {
     const handleClick = async event => {
         const tasks = [...state.tasks]
         event.preventDefault();
-        let response = await  axios.post('http://127.0.0.1:8000/api/tasks', {
+        let response = await axios.post(apiUrl + '/tasks', {
             id: tasks.length + 1,
             title: addTask,
         })
         tasks.push(response.data.data)
         setState({tasks})
         setAddTask('')
-        
+
     };
 
 
@@ -67,7 +71,7 @@ const KanbanBoard = () => {
     }
     state.tasks !== undefined && state.tasks.forEach((task) => {
         tasks[task.status].push(
-            <div className='card mb-2 bg-secondary text-warning fw-bold'>
+            <div className='card mb-2 text-bg-light shadow' style={{borderLeft: '5px solid #674edf'}}>
                 <div className="card-body">
                     <div key={task.id}
                          onDragStart={(e) => onDragStart(e, task.id)}
@@ -82,55 +86,13 @@ const KanbanBoard = () => {
         );
     })
     return (
-        <>
-            {}
+        <div className='container'>
             <div className="container-drag">
-                <h2 className="header text-center">Kanban Board</h2>
-                <div className="row mb-3">
-                    <div className="offset-3 col-5">
-                        <input type="text" value={addTask} className="form-control" placeholder='Write Your Task'
-                               onChange={handleChange}/>
-                    </div>
-                    <div className="col-2">
-                        <button onClick={handleClick} className='btn btn-success'>Add</button>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-4">
-                        <div className="card">
-                            <span className="img-thumbnail task-header card-title text-center fw-bold bg-primary  text-white">TO-DO</span>
-                            <div className="to_do card-body"
-                                 onDragOver={(e) => onDragOver(e)}
-                                 onDrop={(e) => {
-                                     onDrop(e, "to_do")
-                                 }}>
-                                {tasks.to_do}
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-4">
-                        <div className="card">
-                            <span className="img-thumbnail card-title text-center fw-bold bg-danger  text-white">Progress</span>
-                            <div className="droppable card-body"
-                                 onDragOver={(e) => onDragOver(e)}
-                                 onDrop={(e) => onDrop(e, "progress")}>
-                                {tasks.progress}
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-4">
-                        <div className="card">
-                            <span className="img-thumbnail task-header card-title text-center fw-bold bg-success text-white">DONE</span>
-                            <div className="droppable card-body"
-                                 onDragOver={(e) => onDragOver(e)}
-                                 onDrop={(e) => onDrop(e, "done")}>
-                                {tasks.done}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <h2 className="header text-center m-3">Kanban Board</h2>
+                <AddTask addTask={addTask} handleChange={handleChange} handleClick={handleClick}/>
+                <Board onDragOver={onDragOver} onDrop={onDrop} tasks={tasks}/>
             </div>
-        </>
+        </div>
     );
 }
 

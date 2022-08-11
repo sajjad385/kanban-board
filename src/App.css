@@ -1,3 +1,9 @@
 .card {
     cursor: pointer;
+    border-radius: 0;
+    border: none;
+}
+.task-header {
+    border-radius: 0;
+    border: none;
 }
